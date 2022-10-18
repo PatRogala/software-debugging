@@ -58,7 +58,12 @@ def debug(command, my_locals):
         stepping = False
         return True
     elif command.startswith('p'):    # print
-        # TODO:
+        if arg is None:
+            print my_locals
+        elif my_locals.has_key(arg):
+            print arg, '=', repr(my_locals[arg])
+        else:
+            print 'No such variable:', arg
     elif command.startswith('q'):   # quit
         sys.exit(0)
     else:
