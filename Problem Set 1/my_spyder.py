@@ -29,6 +29,7 @@ def main():
 
 # globals
 breakpoints = {9: True}
+watchpoints = {'c': True}
 stepping = False
 
 """ *** INSTRUCTIONS ***
@@ -45,6 +46,7 @@ if no such variable exists.
 def debug(command, my_locals):
     global stepping
     global breakpoints
+    global watchpoints
 
     if command.find(' ') > 0:
         arg = command.split(' ')[1]
@@ -64,7 +66,18 @@ def debug(command, my_locals):
             print arg, '=', repr(my_locals[arg])
         else:
             print 'No such variable:', arg
+    elif command.startswith('b'):    # breakpoint
+        if arg is None:
+            print "You must supply a line number"
+        else:
+            breakpoints[int(arg)] = True
+    elif command.startswith('w'):
+        if arg is None:
+            print "You must supply a variable name"
+        else:
+            watchpoints[arg] = True
     elif command.startswith('q'):   # quit
+        print "Exiting my-spyder..."
         sys.exit(0)
     else:
         print "No such command", repr(command)
@@ -92,6 +105,10 @@ def traceit(frame, event, trace_arg):
     return traceit
 
 # Using the tracer
-sys.settrace(traceit)
-main()
-sys.settrace(None)
+# sys.settrace(traceit)
+# main()
+# sys.settrace(None)
+
+print watchpoints
+debug("w", {'s': 'xyz', 'tag': False})
+print watchpoints
